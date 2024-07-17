@@ -6,11 +6,11 @@ import java.util.List;
 
 public class InputMenue extends Menue
 {
-    InputMenue(Game game)
+    public InputMenue(Game game)
     {
         super(game);
     }
-    protected int CheckUserInput(int minSize, int maxSize)
+    public int CheckUserInput(int minSize, int maxSize)
     {
         int userInput = 0;
         boolean isCorrect = false;
@@ -45,7 +45,7 @@ public class InputMenue extends Menue
             if (scanner.hasNext())
             {
                 userInput = scanner.next();
-                if (RightInputList.contains(userInput))
+                if (RightInputList.contains(userInput.toUpperCase()))
                 {
                     isCorrect = true;
                 }
