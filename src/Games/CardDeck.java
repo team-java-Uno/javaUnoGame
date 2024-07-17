@@ -54,7 +54,7 @@ public class CardDeck
             ShuffleCardDeck();
             System.out.println("Reshuffle all Already Played Cards");
         }
-        return CardList.remove(CardList.size() - 1);
+        return CardList.remove(CardList.size() -1);
     }
     public void AddCard(UnoCards card)
     {

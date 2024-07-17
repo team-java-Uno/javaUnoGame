@@ -40,6 +40,7 @@ public class Game {
             roundIndex++;
             System.out.println("Starting Game.....");
             RoundLoop(roundIndex);
+            PlayerList.get(0).points = 500;
         }
     }
     private void DealPlayerHand()
@@ -72,7 +73,7 @@ public class Game {
         while(isGameRunning)
         {
             DealPlayerHand();
-
+            isGameRunning = false;
         }
     }
     private void InitStartingCard()

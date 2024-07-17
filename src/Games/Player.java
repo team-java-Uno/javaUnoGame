@@ -4,6 +4,7 @@ import Cards.CardColor;
 import Cards.CardValue;
 import Cards.UnoCards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player
@@ -18,6 +19,7 @@ public class Player
     {
         this.PlayerID = PlayerId;
         this.Name = name;
+        this.PlayerHand = new ArrayList<>();
     }
     public String GetName()
     {
