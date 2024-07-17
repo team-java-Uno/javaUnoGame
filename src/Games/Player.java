@@ -57,6 +57,9 @@ public class Player implements HasPoints
         }
         return false;
     }
+    public void SetPlayerHand(List<UnoCards> newHand) {
+        this.PlayerHand = newHand;
+    }
     @Override
     public void PointValue(int points){
         points = playerPoints;

@@ -159,6 +159,48 @@ public class Game {
                 cards.GetColor() == CardColor.BLACK;
 
     }
+    private void PassCardsClockwise() {
+        if (PlayerList.isEmpty()) return;
+
+        // SPeichert die hand vom ersten spieler
+        List<UnoCards> firstPlayerHand = new ArrayList<>(PlayerList.get(0).GetPlayerHand());
+
+        // Reicht die hand dem anderen spiler weiter
+        for (int i = 0; i < PlayerList.size() - 1; i++) {
+            PlayerList.get(i).SetPlayerHand(new ArrayList<>(PlayerList.get(i + 1).GetPlayerHand()));
+        }
+
+        // der letzte spiler bekommt die vom ersten
+        PlayerList.get(PlayerList.size() - 1).SetPlayerHand(firstPlayerHand);
+
+        System.out.println("All players passed their hands clockwise.");
+    }
+
+    private void SwapHandWithAnotherPlayer() {
+        Player currentPlayer = PlayerList.get(currentPlayerIndex);
+        System.out.println("Choose a player to swap hands with:");
+
+        // Print player options except the current player
+        for (int i = 0; i < PlayerList.size(); i++) {
+            if (i != currentPlayerIndex) {
+                System.out.printf("%d: %s\n", i, PlayerList.get(i).GetName());
+            }
+        }
+        int chosenPlayerIndex = inputMenue.CheckUserInput(0, PlayerList.size() - 1);
+
+        while (chosenPlayerIndex == currentPlayerIndex) {
+            System.out.println("You cannot swap hands with yourself. Choose another player:");
+            chosenPlayerIndex = inputMenue.CheckUserInput(0, PlayerList.size() - 1);
+        }
+
+        // Swap hands between current player and chosen player
+        Player chosenPlayer = PlayerList.get(chosenPlayerIndex);
+        List<UnoCards> tempHand = new ArrayList<>(currentPlayer.GetPlayerHand());
+        currentPlayer.SetPlayerHand(chosenPlayer.GetPlayerHand());
+        chosenPlayer.SetPlayerHand(tempHand);
+
+        System.out.printf("%s swapped hands with %s.\n", currentPlayer.GetName(), chosenPlayer.GetName());
+    }
     private void ApplyCardEffect(UnoCards cards)
     {
         switch (cards.GetValue())
@@ -181,10 +223,16 @@ public class Game {
                 nextPlayerFour.PlayerDrawCard(UnoCardDeck);
                 nextPlayerFour.PlayerDrawCard(UnoCardDeck);
                 break;
+            case ZERO:
+                PassCardsClockwise();
+                break;
+            case SEVEN:
+                SwapHandWithAnotherPlayer();
             default:
                 break;
         }
     }
+
     private int getNextPlayerIndex()
     {
         if (reverseDirection)

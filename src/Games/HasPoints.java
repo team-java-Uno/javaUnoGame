@@ -1,5 +1,5 @@
 package Games;
 
-interface HasPoints {
+public interface HasPoints {
     void PointValue(int points);
 }
