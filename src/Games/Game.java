@@ -44,7 +44,7 @@ public class Game {
             roundIndex++;
             System.out.println("Starting Game.....");
             RoundLoop(roundIndex);
-            PlayerList.get(0).points = 500;
+            PlayerList.get(0).playerPoints = 500;
         }
     }
     private void DealPlayerHand()
@@ -62,7 +62,7 @@ public class Game {
     {
         for (Player player : PlayerList)
         {
-            if (player.points >= 500)
+            if (player.playerPoints >= 500)
             {
                 return true;
             }

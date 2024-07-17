@@ -7,11 +7,11 @@ import Cards.UnoCards;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player
+public class Player implements HasPoints
 {
     private int PlayerID;
     private final String Name;
-    protected int points = 0;
+    protected int playerPoints = 0;
     public static List<Player> PlayerList;
     private List<UnoCards> PlayerHand;
 
@@ -56,6 +56,10 @@ public class Player
             }
         }
         return false;
+    }
+    @Override
+    public void PointValue(int points){
+        points = playerPoints;
     }
 
 

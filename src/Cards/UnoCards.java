@@ -1,6 +1,8 @@
 package Cards;
 
-public abstract class UnoCards {
+import Games.HasPoints;
+
+public abstract class UnoCards implements HasPoints {
     private CardColor cardColor;
     private CardValue cardValue;
 
@@ -15,5 +17,10 @@ public abstract class UnoCards {
 
     public CardValue GetValue() {
         return cardValue;
+    }
+
+    @Override
+    public void PointValue(int points){
+        points = cardValue.GetCardPoints();
     }
 }
