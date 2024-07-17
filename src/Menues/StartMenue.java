@@ -44,6 +44,7 @@ public class StartMenue extends Menue
             else
             {
                 System.out.println("Please enter only Numbers");
+                scanner.next();
             }
         }
         return PlayerList;

@@ -16,7 +16,7 @@ public class CardDeck
         this.CurrentGame = game;
         this.CardList = new ArrayList<>();
         InitCardDeck();
-        PrintCards();
+        ShuffleCardDeck();
     }
     private void InitCardDeck()
     {
@@ -54,17 +54,10 @@ public class CardDeck
             ShuffleCardDeck();
             System.out.println("Reshuffle all Already Played Cards");
         }
-        return CardList.remove(CardList.size() - 1);
+        return CardList.remove(CardList.size() -1);
     }
     public void AddCard(UnoCards card)
     {
         CardList.add(card);
-    }
-    private void PrintCards()
-    {
-        for (UnoCards cards :CardList)
-        {
-            System.out.printf("%s_%s", cards.GetColor(), cards.GetValue());
-        }
     }
 }

@@ -4,13 +4,14 @@ import Cards.CardColor;
 import Cards.CardValue;
 import Cards.UnoCards;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Player
+public class Player implements HasPoints
 {
     private int PlayerID;
     private final String Name;
-    protected int points = 0;
+    protected int playerPoints = 0;
     public static List<Player> PlayerList;
     private List<UnoCards> PlayerHand;
 
@@ -18,6 +19,7 @@ public class Player
     {
         this.PlayerID = PlayerId;
         this.Name = name;
+        this.PlayerHand = new ArrayList<>();
     }
     public String GetName()
     {
@@ -32,7 +34,7 @@ public class Player
         System.out.print("Your Hand: ");
         for (int i = 0; i < PlayerHand.size(); i++)
         {
-            System.out.printf("%d. %s_%s", i , PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue());
+            System.out.printf("%d.%s_%s, ", i , PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue());
         }
     }
     public void PlayerDrawCard(CardDeck deck)
@@ -54,6 +56,13 @@ public class Player
             }
         }
         return false;
+    }
+    public void SetPlayerHand(List<UnoCards> newHand) {
+        this.PlayerHand = newHand;
+    }
+    @Override
+    public void PointValue(int points){
+        points = playerPoints;
     }
 
 
