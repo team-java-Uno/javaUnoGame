@@ -34,7 +34,7 @@ public class Player
         System.out.print("Your Hand: ");
         for (int i = 0; i < PlayerHand.size(); i++)
         {
-            System.out.printf("%d. %s_%s", i , PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue());
+            System.out.printf("%d.%s_%s, ", i , PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue());
         }
     }
     public void PlayerDrawCard(CardDeck deck)

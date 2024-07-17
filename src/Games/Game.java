@@ -83,8 +83,8 @@ public class Game {
         while(isGameRunning)
         {
             Player currentPlayer = PlayerList.get(currentPlayerIndex);
-            System.out.printf("%s's turn. \n", currentPlayer);
-            System.out.printf("Current card is: %s_%s ", currentCardColor, currentCardValue);
+            System.out.printf("%s's turn. \n", currentPlayer.GetName());
+            System.out.printf("Current card is: %s_%s \n", currentCardColor, currentCardValue);
             currentPlayer.PrintPlayerHand();
             System.out.println("\n");
 
@@ -111,12 +111,31 @@ public class Game {
                         // Ensure the selected color is converted to the appropriate enum type
                         currentCardColor = CardColor.valueOf(inputMenue.CheckStringInput(colors).toUpperCase());
                     }
-
+                    ApplyCardEffect(cards);
+                }
+                else
+                {
+                    System.out.println("Invalid card. Try again.");
+                    continue;
                 }
             }
+            else
+            {
+                System.out.println("No playable card. Please enter 1 to Draw a card");
+                inputMenue.CheckUserInput(1,1);
+                currentPlayer.PlayerDrawCard(UnoCardDeck);
+            }
 
-            isGameRunning = false;
+            if (currentPlayer.GetPlayerHand().isEmpty())
+            {
+                isGameRunning = false;
+                System.out.println(currentPlayer.GetName() + " has won the game!");
+            } else
+            {
+                currentPlayerIndex = getNextPlayerIndex();
+            }
         }
+
     }
     private UnoCards InitStartingCard()
     {
