@@ -1,7 +1,6 @@
 package Games;
 
 import Cards.*;
-import Menues.ConsoleColor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +49,7 @@ public class CardDeck
         {
             CardList.addAll(Game.playedCards);
             ShuffleCardDeck();
-            ConsoleColor.printColored("Reshuffle all Already Played Cards",ConsoleColor.CYAN);
+            System.out.println("Reshuffle all Already Played Cards");
         }
         return CardList.remove(CardList.size() -1);
     }

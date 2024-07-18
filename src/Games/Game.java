@@ -175,7 +175,7 @@ public class Game {
                         if (isValidPlay(card))
                         {
                             currentPlayer.PlayCard(card);
-                            ConsoleColor.printColored(currentPlayer.GetName()+" played "+printColoredCard(card.GetColor(), card.GetValue())+"\n",ConsoleColor.CYAN );
+                            ConsoleColor.printColored("Player "+currentPlayer.GetName()+" played the card: " +printColoredCard(card.GetColor(), card.GetValue()) , ConsoleColor.CYAN);
                             currentCardColor = card.GetColor();
                             currentCardValue = card.GetValue();
                             checkBlack(card);
@@ -396,8 +396,8 @@ public class Game {
     public static Game loadGame(String fileName) {
         return SaveGame.loadGameState(fileName);
     }
-    public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue)
-    {
-        return currentCardColor.GetColoredString(currentCardColor.name())+"_"+currentCardColor.GetColoredString(currentCardValue.name());
+    public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue) {
+        String coloredUnderscore = currentCardColor.GetColoredString("_");
+        return currentCardColor.GetColoredString(currentCardColor.name()) + coloredUnderscore + currentCardColor.GetColoredString(currentCardValue.name());
     }
 }

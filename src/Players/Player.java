@@ -6,7 +6,6 @@ import Cards.UnoCards;
 import Games.CardDeck;
 import Games.Game;
 import Games.HasPoints;
-import Menues.ConsoleColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +43,10 @@ public class Player implements HasPoints
     }
     public void PrintPlayerHand()
     {
-        ConsoleColor.printColored("Your Hand: ",ConsoleColor.CYAN);
+        System.out.print("Your Hand: ");
         for (int i = 0; i < PlayerHand.size(); i++)
         {
-            ConsoleColor.printColored(i+"."+Game.printColoredCard(PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue()),ConsoleColor.CYAN);
+            System.out.print(i+ ". "+ Game.printColoredCard(PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue())+ "\n");
         }
     }
     public void PlayerDrawCard(CardDeck deck)

@@ -4,7 +4,6 @@ import Cards.Card;
 import Cards.CardColor;
 import Cards.CardValue;
 import Cards.UnoCards;
-import Menues.ConsoleColor;
 import Players.Player;
 
 import java.io.*;
@@ -21,7 +20,7 @@ public class SaveGame {
 
             SavePlayersHands(game, writer);
 
-            ConsoleColor.printColored("Game state saved to " + fileName, ConsoleColor.CYAN);
+            System.out.println("Game state saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,6 +55,7 @@ public class SaveGame {
         writer.write(game.reverseDirection + "," + game.currentPlayerIndex + "," + game.currentCardColor + "," + game.currentCardValue + "\n");
     }
 
+    // Method to load the entire game state from a file
     public static Game loadGameState(String fileName) {
         Game loadGame = new Game();
         loadGame.initGameComponents();
@@ -63,6 +63,7 @@ public class SaveGame {
         loadGame.unoCardDeck.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String line;
+
 
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
@@ -94,7 +95,7 @@ public class SaveGame {
                         break;
                 }
             }
-            ConsoleColor.printColored("Game state loaded from " + fileName,ConsoleColor.CYAN);
+            System.out.println("Game state loaded from " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
