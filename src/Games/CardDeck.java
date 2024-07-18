@@ -56,8 +56,15 @@ public class CardDeck
         }
         return CardList.remove(CardList.size() -1);
     }
-    public void AddCard(UnoCards card)
+    public void addCard(UnoCards card)
     {
         CardList.add(card);
     }
+    public void clear() {
+        CardList.clear();
+    }
+    public List<UnoCards> getCardList() {
+        return CardList;
+    }
+
 }

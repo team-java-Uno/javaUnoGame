@@ -299,5 +299,12 @@ public class Game {
             }
         }
     }
-    // moin
+    public void saveGame(String fileName) {
+        SaveGame saveGame = new SaveGame();
+        saveGame.saveGameState(this, fileName);
+    }
+    public static void loadGame(String fileName) {
+        SaveGame saveGame = new SaveGame();
+        saveGame.loadGameState(fileName);
+    }
 }
