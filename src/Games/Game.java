@@ -32,6 +32,7 @@ public class Game {
         this.inputMenue = new InputMenue(this);
 
         PlayerList = startMenue.initPlayer();
+        PlayerList = startMenue.initAI();
         reverseDirection = false;
         currentPlayerIndex = 0;
 
@@ -170,7 +171,7 @@ public class Game {
             PlayerList.get(i).SetPlayerHand(new ArrayList<>(PlayerList.get(i + 1).GetPlayerHand()));
         }
 
-        // der letzte spiler bekommt die vom ersten
+        // der letzte spieler bekommt die vom ersten
         PlayerList.get(PlayerList.size() - 1).SetPlayerHand(firstPlayerHand);
 
         System.out.println("All players passed their hands clockwise.");
