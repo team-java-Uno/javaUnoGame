@@ -63,11 +63,10 @@ public class Game {
     }
     private static boolean UserLoadLastGame() {
         ConsoleColor.printColored("Do you want to load the last game? (yes/no)",ConsoleColor.CYAN);
-        try (Scanner scanner = new Scanner(System.in)) {
-            String answer = scanner.next();
-            if (answer.equalsIgnoreCase("yes")) {
-                return true;
-            }
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.next();
+        if (answer.equalsIgnoreCase("yes")) {
+            return true;
         }
         return false;
     }
@@ -142,7 +141,6 @@ public class Game {
                     UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
                     ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()),ConsoleColor.CYAN);
 
-                    ConsoleColor.printColored("Player: " + currentPlayer.GetName() + " has drawn the card" + printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()), ConsoleColor.CYAN);
                     if (isValidPlay(drawnCard, currentCardColor, currentCardValue))
                     {
                         ConsoleColor.printColored("The Drawn Card is Playable Player "+currentPlayer.GetName()+" played Drawn Card",ConsoleColor.CYAN);
@@ -155,14 +153,14 @@ public class Game {
                 {
                     SetPlayerPoints(currentPlayer);
                     isGameRunning = false;
-                    System.out.println(currentPlayer.GetName() + " has won the game!");
+                    ConsoleColor.printColored(currentPlayer.GetName() + " has won the game!",ConsoleColor.CYAN);
                 } else
                 {
                     currentPlayerIndex = getNextPlayerIndex();
                 }
                 if (currentPlayer.GetPlayerHand().size() == 1)
                 {
-                    System.out.printf("Player: %s says UNO last Card", currentPlayer.GetName());
+                    ConsoleColor.printColored(currentPlayer.GetName()+" says UNO last Card", ConsoleColor.CYAN);
                 }
             }
             saveGame(fileName);
@@ -180,7 +178,7 @@ public class Game {
                         UnoCards card = currentPlayer.GetPlayerHand().get(i);
                         if (isValidPlay(card, currentCardColor, currentCardValue)) {
                             currentPlayer.PlayCard(card);
-                            ConsoleColor.printColored("Player "+currentPlayer.GetName()+" played the card: " +printColoredCard(card.GetColor(), card.GetValue()) , ConsoleColor.CYAN);
+                            ConsoleColor.printColored(currentPlayer.GetName()+" played "+printColoredCard(card.GetColor(), card.GetValue())+"\n",ConsoleColor.CYAN );
                             currentCardColor = card.GetColor();
                             currentCardValue = card.GetValue();
                             checkBlack(card);
@@ -191,17 +189,17 @@ public class Game {
                 }
                 else
                 {
-                    System.out.printf("%s has no playable card. Drawing a card...\n", currentPlayer.GetName());
+                    ConsoleColor.printColored(currentPlayer.GetName()+" has no playable card. Drawing a card...\n", ConsoleColor.CYAN);
                     currentPlayer.PlayerDrawCard(unoCardDeck);
                 }
                 if (currentPlayer.GetPlayerHand().size() == 1)
                 {
-                    System.out.printf("Player: %s says UNO last Card\n", currentPlayer.GetName());
+                    ConsoleColor.printColored(currentPlayer.GetName()+" says UNO last Card\n", ConsoleColor.CYAN);
                 }
                 if (currentPlayer.GetPlayerHand().isEmpty())
                 {
                     SetPlayerPoints(currentPlayer);
-                    System.out.println(currentPlayer.GetName() + " has won the game!");
+                    ConsoleColor.printColored(currentPlayer.GetName()+ " has won the game!",ConsoleColor.CYAN);
                 }
                 currentPlayerIndex = getNextPlayerIndex();
             }
@@ -211,14 +209,14 @@ public class Game {
     private boolean ChooseCard(Player currentPlayer)
     {
         if(currentPlayer.hasPlayableCard( this, currentCardColor, currentCardValue)) {
-            System.out.printf("Enter the index of the card you want to play: 0-%d", currentPlayer.GetPlayerHand().size() - 1);
+            ConsoleColor.printColored("Enter the index of the card you want to play: 0-"+ (currentPlayer.GetPlayerHand().size() -1 ), ConsoleColor.CYAN);
             int cardIndex = inputMenue.CheckUserInput(0, currentPlayer.GetPlayerHand().size() - 1);
             UnoCards cards = currentPlayer.GetPlayerHand().get(cardIndex);
 
             if (isValidPlay(cards, currentCardColor, currentCardValue))
                 PlayApplyCard(currentPlayer, cards);
             else {
-                System.out.println("Invalid card. Try again.");
+                ConsoleColor.printColored("Invalid card. Try again.", ConsoleColor.CYAN);
                 return true;
             }
             return false;
@@ -243,11 +241,11 @@ public class Game {
             if (currentPlayer.isAI)
             {
                 currentCardColor = currentPlayer.chooseRandomColor();
-                ConsoleColor.printColored("AI chose the color: "+ currentCardColor.GetColoredString(currentCardColor.name()), ConsoleColor.CYAN);
+                ConsoleColor.printColored("AI chose the color: "+ currentCardColor+"\n", ConsoleColor.CYAN);
             }
             else
             {
-                System.out.println("Choose a color: RED, YELLOW, GREEN, BLUE");
+                ConsoleColor.printColored("Choose a color: "+ConsoleColor.RED+"RED, "+ConsoleColor.YELLOW+"YELLOW, "+ConsoleColor.GREEN+"GREEN, "+ConsoleColor.BLUE+"BLUE",ConsoleColor.CYAN);
                 List<String> colors = new ArrayList<>();
                 colors.add("RED");
                 colors.add("BLUE");
@@ -284,61 +282,48 @@ public class Game {
     }
     private void PassCardsClockwise() {
         if (playerList.isEmpty()) return;
-
-        // SPeichert die hand vom ersten spieler
         List<UnoCards> firstPlayerHand = new ArrayList<>(playerList.get(0).GetPlayerHand());
-
-        // Reicht die hand dem anderen spiler weiter
         for (int i = 0; i < playerList.size() - 1; i++) {
             playerList.get(i).SetPlayerHand(new ArrayList<>(playerList.get(i + 1).GetPlayerHand()));
         }
-
-        // der letzte spieler bekommt die vom ersten
         playerList.get(playerList.size() - 1).SetPlayerHand(firstPlayerHand);
-
-        System.out.println("All players passed their hands clockwise.");
+        ConsoleColor.printColored("All players passed their hands clockwise.",ConsoleColor.CYAN);
     }
-
     private void SwapHandWithAnotherPlayer() {
         Player currentPlayer = playerList.get(currentPlayerIndex);
         if (currentPlayer.isAI) {
-            // AI chooses a random player to swap hands with
             Random random = new Random();
             int chosenPlayerIndex;
             do {
                 chosenPlayerIndex = random.nextInt(playerList.size());
-            } while (chosenPlayerIndex == currentPlayerIndex); // Ensure AI does not choose itself
-
+            } while (chosenPlayerIndex == currentPlayerIndex);
             Player chosenPlayer = playerList.get(chosenPlayerIndex);
             List<UnoCards> tempHand = currentPlayer.GetPlayerHand();
             currentPlayer.SetPlayerHand(chosenPlayer.GetPlayerHand());
             chosenPlayer.SetPlayerHand(tempHand);
-
-            System.out.printf("%s swapped hands with %s\n", currentPlayer.GetName(), chosenPlayer.GetName());
+            ConsoleColor.printColored(currentPlayer.GetName()+" swapped hands with "+chosenPlayer.GetName()+"\n",ConsoleColor.CYAN);
         } else {
-            System.out.println("Choose a player to swap hands with:");
+            ConsoleColor.printColored("Choose a player to swap hands with:",ConsoleColor.CYAN);
 
             // Print player options except the current player
             for (int i = 0; i < playerList.size(); i++) {
                 if (i != currentPlayerIndex) {
-                    System.out.printf("%d: %s\n", i, playerList.get(i).GetName());
+                    ConsoleColor.printColored(i+": "+playerList.get(i).GetName()+"\n",ConsoleColor.CYAN);
                 }
-            
             }
             int chosenPlayerIndex = inputMenue.CheckUserInput(0, playerList.size() - 1);
 
             while (chosenPlayerIndex == currentPlayerIndex) {
-                System.out.println("You cannot swap hands with yourself. Choose another player:");
+                ConsoleColor.printColored("You cannot swap hands with yourself. Choose another player:",ConsoleColor.CYAN);
                 chosenPlayerIndex = inputMenue.CheckUserInput(0, playerList.size() - 1);
             }
 
-            // Swap hands between current player and chosen player
             Player chosenPlayer = playerList.get(chosenPlayerIndex);
             List<UnoCards> tempHand = new ArrayList<>(currentPlayer.GetPlayerHand());
             currentPlayer.SetPlayerHand(chosenPlayer.GetPlayerHand());
             chosenPlayer.SetPlayerHand(tempHand);
 
-            System.out.printf("%s swapped hands with %s.\n", currentPlayer.GetName(), chosenPlayer.GetName());
+            ConsoleColor.printColored(currentPlayer.GetName()+" swapped hands with "+chosenPlayer.GetName()+".\n",ConsoleColor.CYAN);
         }
     }
     private void ApplyCardEffect(UnoCards cards)
@@ -395,14 +380,14 @@ public class Game {
             }
         }
     }
-    public void DoubleCard(UnoCards cards)
+    private void DoubleCard(UnoCards cards)
     {
         Player currentplayer = playerList.get(currentPlayerIndex);
         for (UnoCards doubleCard : currentplayer.GetPlayerHand())
         {
             if ((doubleCard.GetColor() == cards.GetColor()) && (doubleCard.GetValue() == cards.GetValue()))
             {
-                System.out.printf("Card was Double on Player Hand Player played Double %s_%s", cards.GetColor(), cards.GetValue());
+                ConsoleColor.printColored("Card was Double on Player Hand Player played Double "+printColoredCard(cards.GetColor(), cards.GetValue()),ConsoleColor.CYAN);
                 currentplayer.PlayCard(doubleCard);
             }
         }
@@ -415,8 +400,8 @@ public class Game {
         Game loadGame = SaveGame.loadGameState(fileName);
         return loadGame;
     }
-    public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue) {
-        String coloredUnderscore = currentCardColor.GetColoredString("_");
-        return currentCardColor.GetColoredString(currentCardColor.name()) + coloredUnderscore + currentCardColor.GetColoredString(currentCardValue.name());
+    public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue)
+    {
+        return currentCardColor.GetColoredString(currentCardColor.name())+"_"+currentCardColor.GetColoredString(currentCardValue.name());
     }
 }
