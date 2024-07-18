@@ -67,8 +67,6 @@ public class Player implements HasPoints
         points = playerPoints;
         return points;
     }
-
-
 }
 
 

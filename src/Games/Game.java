@@ -4,7 +4,6 @@ import Menues.InputMenue;
 import Menues.StartMenue;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Game {
@@ -56,6 +55,7 @@ public class Game {
             {
                 player.PlayerDrawCard(UnoCardDeck);
             }
+
         }
     }
     private boolean CheckPlayerPoints()
@@ -91,21 +91,29 @@ public class Game {
 
             if(currentPlayer.hasPlayableCard( this, currentCardColor, currentCardValue))
             {
-                if (ChooseCard(currentPlayer)) continue;
+                System.out.printf("Enter the index of the card you want to play: 0-%d", currentPlayer.GetPlayerHand().size() -1);
+                int cardIndex = inputMenue.CheckUserInput(0, currentPlayer.GetPlayerHand().size()-1);
+                UnoCards cards = currentPlayer.GetPlayerHand().get(cardIndex);
+
+                if (isValidPlay(cards, currentCardColor, currentCardValue))
+                {
+                    currentPlayer.PlayCard(cards);
+                    currentCardColor = cards.GetColor();
+                    currentCardValue = cards.GetValue();
+                    checkBlack(cards);
+                    ApplyCardEffect(cards, currentPlayerIndex);
+                }
+                else
+                {
+                    System.out.println("Invalid card. Try again.");
+                    continue;
+                }
             }
             else
             {
                 System.out.println("No playable card. Please enter 1 to Draw a card");
                 inputMenue.CheckUserInput(1,1);
                 currentPlayer.PlayerDrawCard(UnoCardDeck);
-                UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
-                System.out.printf("Player %s has drawn the card %s_%s ", currentPlayer.GetName(), drawnCard.GetColor(), drawnCard.GetValue());
-                if (isValidPlay(drawnCard, currentCardColor, currentCardValue))
-                {
-                    System.out.printf("The Drawn Card is Playable Player %s played Drawn Card", currentPlayer.GetName());
-                    PlayApplyCard(currentPlayer, drawnCard);
-                }
-
             }
 
             if (currentPlayer.GetPlayerHand().isEmpty())
@@ -123,33 +131,6 @@ public class Game {
             }
         }
 
-    }
-
-    private boolean ChooseCard(Player currentPlayer)
-    {
-        if(currentPlayer.hasPlayableCard( this, currentCardColor, currentCardValue)) {
-            System.out.printf("Enter the index of the card you want to play: 0-%d", currentPlayer.GetPlayerHand().size() - 1);
-            int cardIndex = inputMenue.CheckUserInput(0, currentPlayer.GetPlayerHand().size() - 1);
-            UnoCards cards = currentPlayer.GetPlayerHand().get(cardIndex);
-
-            if (isValidPlay(cards, currentCardColor, currentCardValue))
-                PlayApplyCard(currentPlayer, cards);
-            else {
-                System.out.println("Invalid card. Try again.");
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
-
-    private void PlayApplyCard(Player currentPlayer, UnoCards cards) {
-        currentPlayer.PlayCard(cards);
-        DoubleCard(cards);
-        currentCardColor = cards.GetColor();
-        currentCardValue = cards.GetValue();
-        checkBlack(cards);
-        ApplyCardEffect(cards);
     }
 
     private void checkBlack(UnoCards cards) {
@@ -233,7 +214,7 @@ public class Game {
 
         System.out.printf("%s swapped hands with %s.\n", currentPlayer.GetName(), chosenPlayer.GetName());
     }
-    private void ApplyCardEffect(UnoCards cards)
+    private void ApplyCardEffect(UnoCards cards, int currentPlayerIndex)
     {
         switch (cards.GetValue())
         {
@@ -241,7 +222,7 @@ public class Game {
                 reverseDirection = !reverseDirection;
                 break;
             case SKIP:
-                this.currentPlayerIndex = getNextPlayerIndex();
+                currentPlayerIndex = getNextPlayerIndex();
                 break;
             case DRAW_TWO:
                 Player nextPlayer = PlayerList.get(getNextPlayerIndex());
@@ -298,5 +279,13 @@ public class Game {
                 currentplayer.PlayCard(doubleCard);
             }
         }
+    }
+    public void saveGame(String fileName) {
+        SaveGame saveGame = new SaveGame();
+        saveGame.saveGameState(this, fileName);
+    }
+    public static void loadGame(String fileName) {
+        SaveGame saveGame = new SaveGame();
+        saveGame.loadGameState(fileName);
     }
 }
