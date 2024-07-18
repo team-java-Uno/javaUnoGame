@@ -14,10 +14,9 @@ import java.util.Random;
 
 public class Player implements HasPoints
 {
-    private int PlayerID;
+    private final int PlayerID;
     private final String Name;
     public int playerPoints = 0;
-    public static List<Player> PlayerList;
     private List<UnoCards> PlayerHand;
 
     public boolean isAI;
@@ -38,10 +37,6 @@ public class Player implements HasPoints
     public String GetName()
     {
         return Name;
-    }
-    public int GetID()
-    {
-        return PlayerID;
     }
     public List<UnoCards> GetPlayerHand()
     {
@@ -64,11 +59,11 @@ public class Player implements HasPoints
         Game.playedCards.add(cards);
         PlayerHand.remove(cards);
     }
-    public boolean hasPlayableCard(Game currentGame, CardColor currentColor, CardValue currentValue)
+    public boolean hasPlayableCard(Game currentGame)
     {
         for ( UnoCards cards : PlayerHand)
         {
-            if (currentGame.isValidPlay(cards, currentColor, currentValue))
+            if (currentGame.isValidPlay(cards))
             {
                 return true;
             }

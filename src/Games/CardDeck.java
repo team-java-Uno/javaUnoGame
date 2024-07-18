@@ -9,11 +9,9 @@ import java.util.List;
 
 public class CardDeck
 {
-    private List<UnoCards> CardList;
-    private Game CurrentGame;
-    public CardDeck(Game game)
+    private final List<UnoCards> CardList;
+    public CardDeck()
     {
-        this.CurrentGame = game;
         this.CardList = new ArrayList<>();
         InitCardDeck();
         ShuffleCardDeck();
@@ -50,7 +48,7 @@ public class CardDeck
     {
         if (CardList.isEmpty())
         {
-            CardList.addAll(this.CurrentGame.playedCards);
+            CardList.addAll(Game.playedCards);
             ShuffleCardDeck();
             ConsoleColor.printColored("Reshuffle all Already Played Cards",ConsoleColor.CYAN);
         }

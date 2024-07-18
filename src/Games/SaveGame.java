@@ -8,12 +8,8 @@ import Menues.ConsoleColor;
 import Players.Player;
 
 import java.io.*;
-import java.util.List;
 
 public class SaveGame {
-
-    private List<UnoCards> PlayerHand;
-
     // Method to save the entire game state to a file
     public void saveGameState(Game game, String fileName) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {

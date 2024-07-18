@@ -1,13 +1,12 @@
 package Menues;
-import Games.Game;
 
 import java.util.List;
 
 public class InputMenue extends Menue
 {
-    public InputMenue(Game game)
+    public InputMenue()
     {
-        super(game);
+        super();
     }
     public int CheckUserInput(int minSize, int maxSize)
     {

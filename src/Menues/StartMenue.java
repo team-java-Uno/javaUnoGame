@@ -1,6 +1,5 @@
 package Menues;
 import Players.AI;
-import Games.Game;
 import Players.Player;
 
 
@@ -9,10 +8,10 @@ import java.util.List;
 
 public class StartMenue extends Menue
 {
-    private List<Player> PlayerList;
-    public StartMenue(Game game, List<Player> playerList)
+    private final List<Player> PlayerList;
+    public StartMenue(List<Player> playerList)
     {
-        super(game);
+        super();
         this.PlayerList = playerList;
     }
     public List<Player> initPlayer()

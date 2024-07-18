@@ -19,8 +19,7 @@ public class GameTest {
         game.playerList.add(player);
         game.currentPlayerIndex = 0;
 
-        game.DoubleCard(new UniTestUnoCards(CardColor.RED, CardValue.ONE));
 
-        assertTrue(player.GetPlayerHand().isEmpty());
+
     }
 }

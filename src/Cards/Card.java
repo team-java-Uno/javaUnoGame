@@ -1,6 +1,5 @@
 package Cards;
 
-import Cards.UnoCards;
 
 public class Card extends UnoCards
 {

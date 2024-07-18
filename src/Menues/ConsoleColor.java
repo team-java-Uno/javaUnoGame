@@ -1,7 +1,5 @@
 package Menues;
 
-import Cards.CardColor;
-
 public enum ConsoleColor
 {
     RED("\u001B[31m"),
@@ -22,6 +20,6 @@ public enum ConsoleColor
     }
     public static void printColored(String text, ConsoleColor color)
     {
-        System.out.println(color.toString() + text + ConsoleColor.RESET.toString());
+        System.out.println(color.toString() + text + ConsoleColor.RESET);
     }
 }

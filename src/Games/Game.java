@@ -6,7 +6,6 @@ import Menues.StartMenue;
 import Players.Player;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -17,7 +16,7 @@ public class Game {
         if (Game.UserLoadLastGame())
         {
             Game loadGame = Game.loadGame(fileName);
-            loadGame.isloadGame = true;
+            loadGame.isLoadedGame = true;
             loadGame.GameLoop();
         }
         else
@@ -38,8 +37,8 @@ public class Game {
     public CardValue currentCardValue;
     private InputMenue inputMenue;
     private StartMenue startMenue;
-    private static String fileName = "gameState.txt";
-    private boolean isloadGame = false;
+    private static final String fileName = "gameState.txt";
+    private boolean isLoadedGame = false;
 
     private void Initializer()
     {
@@ -49,9 +48,9 @@ public class Game {
     //initializer--------------------------------------------------------------------------------
     public void initGameComponents() {
         playerList = new ArrayList<>();
-        unoCardDeck = new CardDeck(this);
-        this.startMenue = new StartMenue(this, playerList);
-        this.inputMenue = new InputMenue(this);
+        unoCardDeck = new CardDeck();
+        this.startMenue = new StartMenue(playerList);
+        this.inputMenue = new InputMenue();
     }
 
     private void initNewGame() {
@@ -65,10 +64,7 @@ public class Game {
         ConsoleColor.printColored("Do you want to load the last game? (yes/no)",ConsoleColor.CYAN);
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.next();
-        if (answer.equalsIgnoreCase("yes")) {
-            return true;
-        }
-        return false;
+        return answer.equalsIgnoreCase("yes");
     }
 
     //initializer end--------------------------------------------------------------------------------
@@ -108,7 +104,7 @@ public class Game {
         UnoCards firstCard;
         ConsoleColor.printColored("Start Round "+roundIndex, ConsoleColor.CYAN);
         ConsoleColor.printColored("Dealing Card.....",ConsoleColor.CYAN);
-        if(!isloadGame)
+        if(!isLoadedGame)
         {
             DealPlayerHand();
         }
@@ -129,7 +125,7 @@ public class Game {
                 currentPlayer.PrintPlayerHand();
                 System.out.println("\n");
 
-                if(currentPlayer.hasPlayableCard( this, currentCardColor, currentCardValue))
+                if(currentPlayer.hasPlayableCard( this))
                 {
                     if (ChooseCard(currentPlayer)) continue;
                 }
@@ -141,7 +137,7 @@ public class Game {
                     UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
                     ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()),ConsoleColor.CYAN);
 
-                    if (isValidPlay(drawnCard, currentCardColor, currentCardValue))
+                    if (isValidPlay(drawnCard))
                     {
                         ConsoleColor.printColored("The Drawn Card is Playable Player "+currentPlayer.GetName()+" played Drawn Card",ConsoleColor.CYAN);
                         PlayApplyCard(currentPlayer, drawnCard);
@@ -172,11 +168,12 @@ public class Game {
         {
             Player currentPlayer = playerList.get(currentPlayerIndex);
             if (currentPlayer.isAI) {
-                if (currentPlayer.hasPlayableCard(this, currentCardColor, currentCardValue))
+                if (currentPlayer.hasPlayableCard(this))
                 {
                     for (int i = 0; i < currentPlayer.GetPlayerHand().size(); i++) {
                         UnoCards card = currentPlayer.GetPlayerHand().get(i);
-                        if (isValidPlay(card, currentCardColor, currentCardValue)) {
+                        if (isValidPlay(card))
+                        {
                             currentPlayer.PlayCard(card);
                             ConsoleColor.printColored(currentPlayer.GetName()+" played "+printColoredCard(card.GetColor(), card.GetValue())+"\n",ConsoleColor.CYAN );
                             currentCardColor = card.GetColor();
@@ -208,12 +205,12 @@ public class Game {
 
     private boolean ChooseCard(Player currentPlayer)
     {
-        if(currentPlayer.hasPlayableCard( this, currentCardColor, currentCardValue)) {
+        if(currentPlayer.hasPlayableCard( this)) {
             ConsoleColor.printColored("Enter the index of the card you want to play: 0-"+ (currentPlayer.GetPlayerHand().size() -1 ), ConsoleColor.CYAN);
             int cardIndex = inputMenue.CheckUserInput(0, currentPlayer.GetPlayerHand().size() - 1);
             UnoCards cards = currentPlayer.GetPlayerHand().get(cardIndex);
 
-            if (isValidPlay(cards, currentCardColor, currentCardValue))
+            if (isValidPlay(cards))
                 PlayApplyCard(currentPlayer, cards);
             else {
                 ConsoleColor.printColored("Invalid card. Try again.", ConsoleColor.CYAN);
@@ -273,7 +270,7 @@ public class Game {
         }
         return firstCard;
     }
-    public boolean isValidPlay(UnoCards cards, CardColor Color, CardValue Value)
+    public boolean isValidPlay(UnoCards cards)
     {
         return cards.GetColor() == currentCardColor ||
                 cards.GetValue() == currentCardValue ||
@@ -397,8 +394,7 @@ public class Game {
         saveGame.saveGameState(this, fileName);
     }
     public static Game loadGame(String fileName) {
-        Game loadGame = SaveGame.loadGameState(fileName);
-        return loadGame;
+        return SaveGame.loadGameState(fileName);
     }
     public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue)
     {
