@@ -32,9 +32,9 @@ public class Game {
         this.inputMenue = new InputMenue(this);
 
         PlayerList = startMenue.initPlayer();
-        PlayerList = startMenue.initAI();
+        PlayerList = (startMenue.initAI(inputMenue));
         reverseDirection = false;
-        currentPlayerIndex = 0;
+        currentPlayerIndex = -1;
 
     }
     private void GameLoop()
@@ -45,7 +45,6 @@ public class Game {
             roundIndex++;
             System.out.println("Starting Game.....");
             RoundLoop(roundIndex);
-            PlayerList.get(0).playerPoints = 500;
         }
     }
     private void DealPlayerHand()
@@ -78,6 +77,7 @@ public class Game {
 
         DealPlayerHand();
         firstCard = InitStartingCard();
+        currentPlayerIndex = 0;
         System.out.printf("Starting Card %s_%s \n", firstCard.GetColor(), firstCard.GetValue());
 
         boolean isGameRunning = true;
@@ -100,19 +100,8 @@ public class Game {
                     currentPlayer.PlayCard(cards);
                     currentCardColor = cards.GetColor();
                     currentCardValue = cards.GetValue();
-                    if (cards.GetColor() == CardColor.BLACK) {
-                        System.out.println("Choose a color: RED, YELLOW, GREEN, BLUE");
-
-                        List<String> colors = new ArrayList<>();
-                        colors.add("RED");
-                        colors.add("BLUE");
-                        colors.add("YELLOW");
-                        colors.add("GREEN");
-
-                        // Ensure the selected color is converted to the appropriate enum type
-                        currentCardColor = CardColor.valueOf(inputMenue.CheckStringInput(colors).toUpperCase());
-                    }
-                    ApplyCardEffect(cards);
+                    checkBlack(cards);
+                    ApplyCardEffect(cards, currentPlayerIndex);
                 }
                 else
                 {
@@ -129,26 +118,43 @@ public class Game {
 
             if (currentPlayer.GetPlayerHand().isEmpty())
             {
+                SetPlayerPoints(currentPlayer);
                 isGameRunning = false;
                 System.out.println(currentPlayer.GetName() + " has won the game!");
             } else
             {
                 currentPlayerIndex = getNextPlayerIndex();
             }
+            if (currentPlayer.GetPlayerHand().size() == 1)
+            {
+                System.out.printf("Player: %s says UNO last Card", currentPlayer.GetName());
+            }
         }
 
     }
+
+    private void checkBlack(UnoCards cards) {
+        if (cards.GetColor() == CardColor.BLACK) {
+            System.out.println("Choose a color: RED, YELLOW, GREEN, BLUE");
+
+            List<String> colors = new ArrayList<>();
+            colors.add("RED");
+            colors.add("BLUE");
+            colors.add("YELLOW");
+            colors.add("GREEN");
+
+            // Ensure the selected color is converted to the appropriate enum type
+            currentCardColor = CardColor.valueOf(inputMenue.CheckStringInput(colors).toUpperCase());
+        }
+    }
+
     private UnoCards InitStartingCard()
     {
         UnoCards firstCard = UnoCardDeck.DrawCard();
-
-        while(firstCard.GetColor() == CardColor.BLACK)
-        {
-            UnoCardDeck.AddCard(firstCard);
-            UnoCardDeck.ShuffleCardDeck();
-            firstCard = UnoCardDeck.DrawCard();
-        }
         Game.PlayedCards.add(firstCard);
+        firstCard = new Card(CardColor.BLACK, CardValue.DRAW_FOUR);
+
+        ApplyCardEffect(firstCard, currentPlayerIndex);
         currentCardColor = firstCard.GetColor();
         currentCardValue = firstCard.GetValue();
         return firstCard;
@@ -202,7 +208,7 @@ public class Game {
 
         System.out.printf("%s swapped hands with %s.\n", currentPlayer.GetName(), chosenPlayer.GetName());
     }
-    private void ApplyCardEffect(UnoCards cards)
+    private void ApplyCardEffect(UnoCards cards, int currentPlayerIndex)
     {
         switch (cards.GetValue())
         {
@@ -241,6 +247,19 @@ public class Game {
             return (currentPlayerIndex == 0) ? PlayerList.size() -1 : currentPlayerIndex -1;
         } else {
             return (currentPlayerIndex+ 1) % PlayerList.size();
+        }
+    }
+    private void SetPlayerPoints(Player currentplayer)
+    {
+        for (Player player : PlayerList)
+        {
+            if (player != currentplayer)
+            {
+                for( UnoCards cards : player.GetPlayerHand())
+                {
+                    currentplayer.playerPoints += cards.GetPointValue();
+                }
+            }
         }
     }
 }

@@ -10,7 +10,6 @@ import java.util.List;
 public class StartMenue extends Menue
 {
     private List<Player> PlayerList;
-    private InputMenue inputMenue;
     public StartMenue(Game game, List<Player> playerList)
     {
         super(game);
@@ -50,7 +49,7 @@ public class StartMenue extends Menue
         }
         return PlayerList;
     }
-    public List<Player> initAI()
+    public List<Player> initAI(InputMenue inputMenue)
     {
         System.out.println("How many AI Enemies?");
         int amountAI = inputMenue.CheckUserInput(0, 3);
@@ -61,5 +60,6 @@ public class StartMenue extends Menue
         }
         return PlayerList;
     }
+
 }
 
