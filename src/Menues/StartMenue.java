@@ -1,9 +1,9 @@
 package Menues;
+import Games.AI;
 import Games.Game;
 import Games.Player;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -49,5 +49,17 @@ public class StartMenue extends Menue
         }
         return PlayerList;
     }
+    public List<Player> initAI(InputMenue inputMenue)
+    {
+        System.out.println("How many AI Enemies?");
+        int amountAI = inputMenue.CheckUserInput(0, 3);
+
+        for (int i = 1; i <= amountAI; i++)
+        {
+            PlayerList.add(new AI(PlayerList.size()+i, "AI"+i));
+        }
+        return PlayerList;
+    }
+
 }
 
