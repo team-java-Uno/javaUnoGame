@@ -24,12 +24,12 @@ public class InputMenue extends Menue
                 }
                 else
                 {
-                    ConsoleColor.printColored("please enter only numbers that are in the required Range",ConsoleColor.CYAN);
+                    System.out.println("please enter only numbers that are in the required Range");
                 }
             }
             else
             {
-                ConsoleColor.printColored("please enter only numbers that are in the required Range",ConsoleColor.CYAN);
+                System.out.println("please enter only numbers that are in the required Range");
                 scanner.next();
             }
         }
@@ -50,12 +50,12 @@ public class InputMenue extends Menue
                 }
                 else
                 {
-                    ConsoleColor.printColored("please enter only a valid answer",ConsoleColor.CYAN);
+                    System.out.println("please enter only a valid answer");
                 }
             }
             else
             {
-               ConsoleColor.printColored("Please enter only letters", ConsoleColor.CYAN);
+                System.out.println("Please enter only letters");
                 scanner.next();
             }
         }
