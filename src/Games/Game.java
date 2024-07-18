@@ -5,65 +5,38 @@ import Menues.StartMenue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-public class  Game {
+public class Game {
     public static void main(String[] args)
     {
-        if (Game.UserLoadLastGame())
-        {
-            Game.loadGame(fileName);
-        }
-        else
-        {
-            Game Game_1 = new Game();
-            Game_1.Initializer();
-            Game_1.GameLoop();
-        }
-
+        Game Game_1 = new Game();
+        Game_1.Initializer();
+        Game_1.GameLoop();
     }
 
     public static List<UnoCards> PlayedCards = new ArrayList<>();
-    public List<Player> PlayerList;
-    CardDeck UnoCardDeck;
-    boolean reverseDirection;
-    int currentPlayerIndex;
-    CardColor currentCardColor;
-    CardValue currentCardValue;
+    private List<Player> PlayerList;
+    private CardDeck UnoCardDeck;
+    private boolean reverseDirection;
+    private int currentPlayerIndex;
+    private CardColor currentCardColor;
+    private CardValue currentCardValue;
     private InputMenue inputMenue;
     private StartMenue startMenue;
-    private static String fileName = "gameState.txt";
 
     private void Initializer()
     {
-        initGameComponents();
-        initNewGame();
-    }
-    //initializer--------------------------------------------------------------------------------
-    private void initGameComponents() {
         PlayerList = new ArrayList<>();
         UnoCardDeck = new CardDeck(this);
         this.startMenue = new StartMenue(this, PlayerList);
         this.inputMenue = new InputMenue(this);
-    }
 
-    private void initNewGame() {
         PlayerList = startMenue.initPlayer();
         PlayerList = (startMenue.initAI(inputMenue));
         reverseDirection = false;
         currentPlayerIndex = -1;
-    }
-    private static boolean UserLoadLastGame() {
-        System.out.println("Do you want to load the last game? (yes/no)");
-        Scanner scanner = new Scanner(System.in);
-        String answer = scanner.next();
-        if (answer.equalsIgnoreCase("yes")) {
-            return true;
-        }
-        return false;
-    }
 
-    //initializer end--------------------------------------------------------------------------------
+    }
     private void GameLoop()
     {
         int roundIndex = 0;
@@ -85,7 +58,7 @@ public class  Game {
 
         }
     }
-    public boolean CheckPlayerPoints()
+    private boolean CheckPlayerPoints()
     {
         for (Player player : PlayerList)
         {
@@ -156,7 +129,6 @@ public class  Game {
             {
                 System.out.printf("Player: %s says UNO last Card", currentPlayer.GetName());
             }
-            saveGame(fileName);
         }
 
     }
@@ -178,12 +150,19 @@ public class  Game {
 
     private UnoCards InitStartingCard()
     {
-        UnoCards firstCard = UnoCardDeck.DrawCard();
-        Game.PlayedCards.add(firstCard);
-
-        ApplyCardEffect(firstCard, currentPlayerIndex);
-        currentCardColor = firstCard.GetColor();
-        currentCardValue = firstCard.GetValue();
+        UnoCards firstCard = null;
+        boolean correctCard = false;
+        while (!correctCard)
+        {
+            firstCard = UnoCardDeck.DrawCard();
+            if (firstCard.GetColor() != CardColor.BLACK)
+            {
+                Game.PlayedCards.add(firstCard);
+                currentCardColor = firstCard.GetColor();
+                currentCardValue = firstCard.GetValue();
+                correctCard = true;
+            }
+        }
         return firstCard;
     }
     public boolean isValidPlay(UnoCards cards, CardColor Color, CardValue Value)
@@ -286,6 +265,18 @@ public class  Game {
                 {
                     currentplayer.playerPoints += cards.GetPointValue();
                 }
+            }
+        }
+    }
+    private void DoubleCard(UnoCards cards)
+    {
+        Player currentplayer = PlayerList.get(currentPlayerIndex);
+        for (UnoCards doubleCard : currentplayer.GetPlayerHand())
+        {
+            if ((doubleCard.GetColor() == cards.GetColor()) && (doubleCard.GetValue() == cards.GetValue()))
+            {
+                System.out.printf("Card was Double on Player Hand Player played Double %s_%s", cards.GetColor(), cards.GetValue());
+                currentplayer.PlayCard(doubleCard);
             }
         }
     }
