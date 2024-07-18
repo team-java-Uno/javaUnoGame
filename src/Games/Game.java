@@ -5,38 +5,65 @@ import Menues.StartMenue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-public class Game {
+public class  Game {
     public static void main(String[] args)
     {
-        Game Game_1 = new Game();
-        Game_1.Initializer();
-        Game_1.GameLoop();
+        if (Game.UserLoadLastGame())
+        {
+            Game.loadGame(fileName);
+        }
+        else
+        {
+            Game Game_1 = new Game();
+            Game_1.Initializer();
+            Game_1.GameLoop();
+        }
+
     }
 
     public static List<UnoCards> PlayedCards = new ArrayList<>();
-    private List<Player> PlayerList;
-    private CardDeck UnoCardDeck;
-    private boolean reverseDirection;
-    private int currentPlayerIndex;
-    private CardColor currentCardColor;
-    private CardValue currentCardValue;
+    public List<Player> PlayerList;
+    CardDeck UnoCardDeck;
+    boolean reverseDirection;
+    int currentPlayerIndex;
+    CardColor currentCardColor;
+    CardValue currentCardValue;
     private InputMenue inputMenue;
     private StartMenue startMenue;
+    private static String fileName = "gameState.txt";
 
     private void Initializer()
     {
+        initGameComponents();
+        initNewGame();
+    }
+    //initializer--------------------------------------------------------------------------------
+    private void initGameComponents() {
         PlayerList = new ArrayList<>();
         UnoCardDeck = new CardDeck(this);
         this.startMenue = new StartMenue(this, PlayerList);
         this.inputMenue = new InputMenue(this);
+    }
 
+    private void initNewGame() {
         PlayerList = startMenue.initPlayer();
         PlayerList = (startMenue.initAI(inputMenue));
         reverseDirection = false;
         currentPlayerIndex = -1;
-
     }
+    private static boolean UserLoadLastGame() {
+        System.out.println("Do you want to load the last game? (yes/no)");
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.next();
+        if (answer.equalsIgnoreCase("yes")) {
+            return true;
+        }
+        return false;
+    }
+
+    //initializer end--------------------------------------------------------------------------------
     private void GameLoop()
     {
         int roundIndex = 0;
@@ -58,7 +85,7 @@ public class Game {
 
         }
     }
-    private boolean CheckPlayerPoints()
+    public boolean CheckPlayerPoints()
     {
         for (Player player : PlayerList)
         {
@@ -129,6 +156,7 @@ public class Game {
             {
                 System.out.printf("Player: %s says UNO last Card", currentPlayer.GetName());
             }
+            saveGame(fileName);
         }
 
     }
@@ -152,7 +180,6 @@ public class Game {
     {
         UnoCards firstCard = UnoCardDeck.DrawCard();
         Game.PlayedCards.add(firstCard);
-        firstCard = new Card(CardColor.BLACK, CardValue.DRAW_FOUR);
 
         ApplyCardEffect(firstCard, currentPlayerIndex);
         currentCardColor = firstCard.GetColor();
@@ -261,5 +288,13 @@ public class Game {
                 }
             }
         }
+    }
+    public void saveGame(String fileName) {
+        SaveGame saveGame = new SaveGame();
+        saveGame.saveGameState(this, fileName);
+    }
+    public static void loadGame(String fileName) {
+        SaveGame saveGame = new SaveGame();
+        saveGame.loadGameState(fileName);
     }
 }
