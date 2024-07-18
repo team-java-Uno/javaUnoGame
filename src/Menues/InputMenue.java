@@ -1,6 +1,5 @@
 package Menues;
 import Games.Game;
-import Games.Player;
 
 import java.util.List;
 
@@ -25,12 +24,12 @@ public class InputMenue extends Menue
                 }
                 else
                 {
-                    System.out.println("please enter only numbers that are in the required Range");
+                    ConsoleColor.printColored("please enter only numbers that are in the required Range",ConsoleColor.CYAN);
                 }
             }
             else
             {
-                System.out.println("please enter only numbers that are in the required Range");
+                ConsoleColor.printColored("please enter only numbers that are in the required Range",ConsoleColor.CYAN);
                 scanner.next();
             }
         }
@@ -51,12 +50,12 @@ public class InputMenue extends Menue
                 }
                 else
                 {
-                    System.out.println("please enter only a valid answer");
+                    ConsoleColor.printColored("please enter only a valid answer",ConsoleColor.CYAN);
                 }
             }
             else
             {
-                System.out.println("Please enter only letters");
+               ConsoleColor.printColored("Please enter only letters", ConsoleColor.CYAN);
                 scanner.next();
             }
         }
