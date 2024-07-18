@@ -63,10 +63,11 @@ public class Game {
     }
     private static boolean UserLoadLastGame() {
         ConsoleColor.printColored("Do you want to load the last game? (yes/no)",ConsoleColor.CYAN);
-        Scanner scanner = new Scanner(System.in);
-        String answer = scanner.next();
-        if (answer.equalsIgnoreCase("yes")) {
-            return true;
+        try (Scanner scanner = new Scanner(System.in)) {
+            String answer = scanner.next();
+            if (answer.equalsIgnoreCase("yes")) {
+                return true;
+            }
         }
         return false;
     }
@@ -400,8 +401,8 @@ public class Game {
         Game loadGame = SaveGame.loadGameState(fileName);
         return loadGame;
     }
-    public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue)
-    {
-        return currentCardColor.GetColoredString(currentCardColor.name())+"_"+currentCardColor.GetColoredString(currentCardValue.name());
+    public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue) {
+        String coloredUnderscore = currentCardColor.GetColoredString("_");
+        return currentCardColor.GetColoredString(currentCardColor.name()) + coloredUnderscore + currentCardColor.GetColoredString(currentCardValue.name());
     }
 }
