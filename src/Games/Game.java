@@ -61,6 +61,7 @@ public class Game {
 
     }
     private static boolean UserLoadLastGame() {
+        ConsoleColor.printColored("Welcome to the Dogs Playing Poker UNO Game",ConsoleColor.CYAN);
         ConsoleColor.printColored("Do you want to load the last game? (yes/no)",ConsoleColor.CYAN);
         Scanner scanner = new Scanner(System.in);
         String answer = scanner.next();
@@ -101,18 +102,7 @@ public class Game {
     }
     private void RoundLoop(int roundIndex)
     {
-        UnoCards firstCard;
-        ConsoleColor.printColored("Start Round "+roundIndex, ConsoleColor.CYAN);
-        ConsoleColor.printColored("Dealing Card.....",ConsoleColor.CYAN);
-        if(!isLoadedGame)
-        {
-            DealPlayerHand();
-        }
-        firstCard = InitStartingCard();
-        currentPlayerIndex = 0;
-        ConsoleColor.printColored("Starting Card is "+ printColoredCard(firstCard.GetColor(),firstCard.GetValue()),ConsoleColor.CYAN);
-
-
+        InitRound(roundIndex);
         boolean isGameRunning = true;
         while(isGameRunning)
         {
@@ -124,82 +114,106 @@ public class Game {
             {
                 currentPlayer.PrintPlayerHand();
                 System.out.println("\n");
-
-                if(currentPlayer.hasPlayableCard( this))
-                {
-                    if (ChooseCard(currentPlayer)) continue;
-                }
-                else
-                {
-                    ConsoleColor.printColored("No Playable card. Please enter 1 to Draw a card",ConsoleColor.CYAN);
-                    inputMenue.CheckUserInput(1,1);
-                    currentPlayer.PlayerDrawCard(unoCardDeck);
-                    UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
-                    ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()),ConsoleColor.CYAN);
-
-                    if (isValidPlay(drawnCard))
-                    {
-                        ConsoleColor.printColored("The Drawn Card is Playable Player "+currentPlayer.GetName()+" played Drawn Card",ConsoleColor.CYAN);
-                        PlayApplyCard(currentPlayer, drawnCard);
-                    }
-
-                }
-
-                if (currentPlayer.GetPlayerHand().isEmpty())
-                {
-                    SetPlayerPoints(currentPlayer);
-                    isGameRunning = false;
-                    ConsoleColor.printColored(currentPlayer.GetName() + " has won the game!",ConsoleColor.CYAN);
-                } else
-                {
-                    currentPlayerIndex = getNextPlayerIndex();
-                }
-                if (currentPlayer.GetPlayerHand().size() == 1)
-                {
-                    ConsoleColor.printColored(currentPlayer.GetName()+" says UNO last Card", ConsoleColor.CYAN);
-                }
+                if (CheckHasPlayableCard(currentPlayer)) continue;
+                isGameRunning = CheckPlayerHandSize(currentPlayer, isGameRunning);
             }
             saveGame(fileName);
         }
 
     }
+
+    private boolean CheckHasPlayableCard(Player currentPlayer) {
+        if(currentPlayer.hasPlayableCard( this))
+        {
+            if (ChooseCard(currentPlayer)) return true;
+        }
+        else
+        {
+            ConsoleColor.printColored("No Playable card. Please enter 1 to Draw a card",ConsoleColor.CYAN);
+            inputMenue.CheckUserInput(1,1);
+            currentPlayer.PlayerDrawCard(unoCardDeck);
+            UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
+            ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()),ConsoleColor.CYAN);
+
+            if (isValidPlay(drawnCard))
+            {
+                ConsoleColor.printColored("The Drawn Card is Playable Player "+ currentPlayer.GetName()+" played Drawn Card",ConsoleColor.CYAN);
+                PlayApplyCard(currentPlayer, drawnCard);
+            }
+        }
+        return false;
+    }
+
+    private void InitRound(int roundIndex) {
+        UnoCards firstCard;
+        ConsoleColor.printColored("Start Round "+ roundIndex, ConsoleColor.CYAN);
+        ConsoleColor.printColored("Dealing Card.....",ConsoleColor.CYAN);
+        if(!isLoadedGame)
+        {
+            DealPlayerHand();
+        }
+        firstCard = InitStartingCard();
+        currentPlayerIndex = 0;
+        ConsoleColor.printColored("Starting Card is "+ printColoredCard(firstCard.GetColor(),firstCard.GetValue()),ConsoleColor.CYAN);
+    }
+
+    private boolean CheckPlayerHandSize(Player currentPlayer, boolean isGameRunning)
+    {
+        if (currentPlayer.GetPlayerHand().isEmpty())
+        {
+            SetPlayerPoints(currentPlayer);
+            isGameRunning = false;
+            ConsoleColor.printColored(currentPlayer.GetName() + "\n\n\n ----------------------has won the game!--------------------------\n\n\n",ConsoleColor.CYAN);
+        } else
+        {
+            currentPlayerIndex = getNextPlayerIndex();
+        }
+        if (currentPlayer.GetPlayerHand().size() == 1)
+        {
+            ConsoleColor.printColored(currentPlayer.GetName()+" says UNO last Card", ConsoleColor.CYAN);
+        }
+        return isGameRunning;
+    }
+
     private void CheckAIRound()
     {
-        {
-            Player currentPlayer = playerList.get(currentPlayerIndex);
-            if (currentPlayer.isAI) {
-                if (currentPlayer.hasPlayableCard(this))
+        Player currentPlayer = playerList.get(currentPlayerIndex);
+        if (currentPlayer.isAI) {
+            if (currentPlayer.hasPlayableCard(this))
+            {
+                for (int i = 0; i < currentPlayer.GetPlayerHand().size(); i++)
                 {
-                    for (int i = 0; i < currentPlayer.GetPlayerHand().size(); i++) {
-                        UnoCards card = currentPlayer.GetPlayerHand().get(i);
-                        if (isValidPlay(card))
-                        {
-                            currentPlayer.PlayCard(card);
-                            ConsoleColor.printColored("Player "+currentPlayer.GetName()+" played the card: " +printColoredCard(card.GetColor(), card.GetValue()) , ConsoleColor.CYAN);
-                            currentCardColor = card.GetColor();
-                            currentCardValue = card.GetValue();
-                            checkBlack(card);
-                            ApplyCardEffect(card);
-                            break;
-                        }
+                    UnoCards card = currentPlayer.GetPlayerHand().get(i);
+                    if (isValidPlay(card))
+                    {
+                        currentPlayer.PlayCard(card);
+                        ConsoleColor.printColored(currentPlayer.GetName()+" is Choosing a Card to Play.....", ConsoleColor.CYAN);
+                        currentPlayer.Delay();
+                        ConsoleColor.printColored("Player "+currentPlayer.GetName()+" played the card: " +printColoredCard(card.GetColor(), card.GetValue()) , ConsoleColor.CYAN);
+                        currentCardColor = card.GetColor();
+                        currentCardValue = card.GetValue();
+                        checkBlack(card);
+                        ApplyCardEffect(card);
+                        break;
                     }
                 }
-                else
-                {
-                    ConsoleColor.printColored(currentPlayer.GetName()+" has no playable card. Drawing a card...\n", ConsoleColor.CYAN);
-                    currentPlayer.PlayerDrawCard(unoCardDeck);
-                }
-                if (currentPlayer.GetPlayerHand().size() == 1)
-                {
-                    ConsoleColor.printColored(currentPlayer.GetName()+" says UNO last Card\n", ConsoleColor.CYAN);
-                }
-                if (currentPlayer.GetPlayerHand().isEmpty())
-                {
-                    SetPlayerPoints(currentPlayer);
-                    ConsoleColor.printColored(currentPlayer.GetName()+ " has won the game!",ConsoleColor.CYAN);
-                }
-                currentPlayerIndex = getNextPlayerIndex();
             }
+            else
+            {
+                ConsoleColor.printColored(currentPlayer.GetName()+" has no playable card. Drawing a card...\n", ConsoleColor.CYAN);
+                currentPlayer.Delay();
+                currentPlayer.PlayerDrawCard(unoCardDeck);
+            }
+            if (currentPlayer.GetPlayerHand().size() == 1)
+            {
+                ConsoleColor.printColored(currentPlayer.GetName()+" says UNO last Card\n", ConsoleColor.CYAN);
+            }
+            if (currentPlayer.GetPlayerHand().isEmpty())
+            {
+                SetPlayerPoints(currentPlayer);
+                ConsoleColor.printColored(currentPlayer.GetName()+ " has won the game!",ConsoleColor.CYAN);
+            }
+            currentPlayerIndex = getNextPlayerIndex();
         }
     }
 
@@ -399,5 +413,12 @@ public class Game {
     public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue) {
         String coloredUnderscore = currentCardColor.GetColoredString("_");
         return currentCardColor.GetColoredString(currentCardColor.name()) + coloredUnderscore + currentCardColor.GetColoredString(currentCardValue.name());
+    }
+    public void setCurrentPlayerIndex(int index) {
+        this.currentPlayerIndex = index;
+    }
+
+    public void setReverseDirection(boolean reverseDirection) {
+        this.reverseDirection = reverseDirection;
     }
 }
