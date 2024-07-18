@@ -1,7 +1,7 @@
 package Menues;
-import Games.AI;
+import Players.AI;
 import Games.Game;
-import Games.Player;
+import Players.Player;
 
 
 import java.util.List;
@@ -30,9 +30,9 @@ public class StartMenue extends Menue
                 {
                     for (int i = 1; i <= playerAmount; i++)
                     {
-                        System.out.println("Games.Player: " + i + ". Choose your Name :");
+                        System.out.println("Players.Player: " + i + ". Choose your Name :");
                         String playerName = scanner.next();
-                        PlayerList.add(new Player(i , playerName));
+                        PlayerList.add(new Player(i , playerName, false));
                     }
                     isSelecting = false;
                 }
@@ -56,7 +56,7 @@ public class StartMenue extends Menue
 
         for (int i = 1; i <= amountAI; i++)
         {
-            PlayerList.add(new AI(PlayerList.size()+i, "AI"+i));
+            PlayerList.add(new AI(PlayerList.size()+i, "AI"+i, true));
         }
         return PlayerList;
     }

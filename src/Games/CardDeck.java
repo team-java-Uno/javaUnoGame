@@ -1,7 +1,6 @@
 package Games;
 
 import Cards.*;
-import Games.Game;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +49,7 @@ public class CardDeck
     {
         if (CardList.isEmpty())
         {
-            CardList.addAll(this.CurrentGame.PlayedCards);
+            CardList.addAll(this.CurrentGame.playedCards);
             ShuffleCardDeck();
             System.out.println("Reshuffle all Already Played Cards");
         }
