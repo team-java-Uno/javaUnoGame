@@ -23,4 +23,9 @@ public class GameTest {
 
         assertTrue(player.GetPlayerHand().isEmpty());
     }
+
+    private void assertTrue(boolean empty) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'assertTrue'");
+    }
 }

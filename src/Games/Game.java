@@ -63,11 +63,10 @@ public class Game {
     }
     private static boolean UserLoadLastGame() {
         ConsoleColor.printColored("Do you want to load the last game? (yes/no)",ConsoleColor.CYAN);
-        try (Scanner scanner = new Scanner(System.in)) {
-            String answer = scanner.next();
-            if (answer.equalsIgnoreCase("yes")) {
-                return true;
-            }
+        Scanner scanner = new Scanner(System.in);
+        String answer = scanner.next();
+        if (answer.equalsIgnoreCase("yes")) {
+            return true;
         }
         return false;
     }
@@ -142,7 +141,7 @@ public class Game {
                     UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
                     ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()),ConsoleColor.CYAN);
 
-                    ConsoleColor.printColored("Player: " + currentPlayer.GetName() + " has drawn the card" + printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()), ConsoleColor.CYAN);
+                    ConsoleColor.printColored("Player: " + currentPlayer.GetName()+ " has drawn the card" + printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()), ConsoleColor.CYAN);
                     if (isValidPlay(drawnCard, currentCardColor, currentCardValue))
                     {
                         ConsoleColor.printColored("The Drawn Card is Playable Player "+currentPlayer.GetName()+" played Drawn Card",ConsoleColor.CYAN);
@@ -395,7 +394,7 @@ public class Game {
             }
         }
     }
-    public void DoubleCard(UnoCards cards)
+    private void DoubleCard(UnoCards cards)
     {
         Player currentplayer = playerList.get(currentPlayerIndex);
         for (UnoCards doubleCard : currentplayer.GetPlayerHand())

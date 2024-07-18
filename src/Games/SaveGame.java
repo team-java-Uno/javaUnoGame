@@ -24,6 +24,7 @@ public class SaveGame {
 
             SavePlayersHands(game, writer);
 
+            System.out.println("Game state saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
