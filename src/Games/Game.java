@@ -114,7 +114,7 @@ public class Game {
         }
         firstCard = InitStartingCard();
         currentPlayerIndex = 0;
-        ConsoleColor.printColored("Starting Card is "+ firstCard.GetColor()+"_"+firstCard.GetValue()+"",ConsoleColor.CYAN);
+        ConsoleColor.printColored("Starting Card is "+ printColoredCard(firstCard.GetColor(),firstCard.GetValue()),ConsoleColor.CYAN);
 
 
         boolean isGameRunning = true;
@@ -122,7 +122,7 @@ public class Game {
         {
             Player currentPlayer = playerList.get(currentPlayerIndex);
             ConsoleColor.printColored(currentPlayer.GetName()+"'s Turn.", ConsoleColor.CYAN);
-            ConsoleColor.printColored("Current card is: "+currentCardColor.GetColoredString(currentCardColor.name())+"_"+currentCardColor.GetColoredString(currentCardValue.name()), ConsoleColor.CYAN);
+            ConsoleColor.printColored("Current card is: "+printColoredCard(currentCardColor, currentCardValue), ConsoleColor.CYAN);
             CheckAIRound();
             if (!currentPlayer.isAI)
             {
@@ -139,12 +139,12 @@ public class Game {
                     inputMenue.CheckUserInput(1,1);
                     currentPlayer.PlayerDrawCard(unoCardDeck);
                     UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
-                    ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+drawnCard.GetColor()+"_"+drawnCard.GetValue(),ConsoleColor.CYAN);
+                    ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()),ConsoleColor.CYAN);
 
                     System.out.printf("Player %s has drawn the card %s_%s ", currentPlayer.GetName(), drawnCard.GetColor(), drawnCard.GetValue());
                     if (isValidPlay(drawnCard, currentCardColor, currentCardValue))
                     {
-                        System.out.printf("The Drawn Card is Playable Player %s played Drawn Card", currentPlayer.GetName());
+                        ConsoleColor.printColored("The Drawn Card is Playable Player "+currentPlayer.GetName()+" played Drawn Card",ConsoleColor.CYAN);
                         PlayApplyCard(currentPlayer, drawnCard);
                     }
 
@@ -412,5 +412,9 @@ public class Game {
     public static Game loadGame(String fileName) {
         Game loadGame = SaveGame.loadGameState(fileName);
         return loadGame;
+    }
+    public String printColoredCard(CardColor currentCardColor, CardValue currentCardValue)
+    {
+        return currentCardColor.GetColoredString(currentCardColor.name())+"_"+currentCardColor.GetColoredString(currentCardValue.name());
     }
 }
