@@ -1,4 +1,4 @@
-false,1,YELLOW,ONE
+false,1,GREEN,FOUR
 Deck,GREEN,TWO
 Deck,GREEN,NINE
 Deck,RED,REVERSE
@@ -87,18 +87,18 @@ Deck,RED,TWO
 Deck,BLUE,EIGHT
 Deck,GREEN,ZERO
 Deck,BLUE,ONE
-Deck,GREEN,TWO
 Played,YELLOW,EIGHT
 Played,YELLOW,FOUR
 Played,YELLOW,DRAW_TWO
 Played,YELLOW,EIGHT
 Played,YELLOW,ONE
+Played,GREEN,TWO
+Played,GREEN,FOUR
 Player,tob,0
 Hand,tob,RED,DRAW_TWO
 Hand,tob,BLUE,DRAW_TWO
 Hand,tob,GREEN,THREE
 Hand,tob,BLUE,NINE
-Hand,tob,GREEN,FOUR
 Hand,tob,GREEN,SKIP
 Hand,tob,RED,FOUR
 Hand,tob,RED,FIVE

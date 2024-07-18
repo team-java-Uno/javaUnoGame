@@ -51,7 +51,7 @@ public class Player implements HasPoints
         System.out.print("Your Hand: ");
         for (int i = 0; i < PlayerHand.size(); i++)
         {
-            System.out.printf("%d.%s_%s, ", i , PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue());
+            System.out.print(i+ ". "+ Game.printColoredCard(PlayerHand.get(i).GetColor(), PlayerHand.get(i).GetValue())+ "\n");
         }
     }
     public void PlayerDrawCard(CardDeck deck)

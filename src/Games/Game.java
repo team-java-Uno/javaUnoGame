@@ -141,7 +141,7 @@ public class Game {
                     UnoCards drawnCard = currentPlayer.GetPlayerHand().get(currentPlayer.GetPlayerHand().size()-1);
                     ConsoleColor.printColored(currentPlayer.GetName()+" has Drawn the Card "+printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()),ConsoleColor.CYAN);
 
-                    System.out.printf("Player %s has drawn the card %s_%s ", currentPlayer.GetName(), drawnCard.GetColor(), drawnCard.GetValue());
+                    ConsoleColor.printColored("Player: " + currentPlayer.GetName()+ " has drawn the card" + printColoredCard(drawnCard.GetColor(), drawnCard.GetValue()), ConsoleColor.CYAN);
                     if (isValidPlay(drawnCard, currentCardColor, currentCardValue))
                     {
                         ConsoleColor.printColored("The Drawn Card is Playable Player "+currentPlayer.GetName()+" played Drawn Card",ConsoleColor.CYAN);
@@ -179,7 +179,7 @@ public class Game {
                         UnoCards card = currentPlayer.GetPlayerHand().get(i);
                         if (isValidPlay(card, currentCardColor, currentCardValue)) {
                             currentPlayer.PlayCard(card);
-                            System.out.printf("Player %s played %s_%s\n",currentPlayer.GetName(), card.GetColor(), card.GetValue());
+                            ConsoleColor.printColored("Player "+currentPlayer.GetName()+" played the card: " +printColoredCard(card.GetColor(), card.GetValue()) , ConsoleColor.CYAN);
                             currentCardColor = card.GetColor();
                             currentCardValue = card.GetValue();
                             checkBlack(card);
@@ -242,7 +242,7 @@ public class Game {
             if (currentPlayer.isAI)
             {
                 currentCardColor = currentPlayer.chooseRandomColor();
-                System.out.printf("AI chose the color: %s\n", currentCardColor);
+                ConsoleColor.printColored("AI chose the color: "+ currentCardColor.GetColoredString(currentCardColor.name()), ConsoleColor.CYAN);
             }
             else
             {
@@ -322,6 +322,7 @@ public class Game {
                 if (i != currentPlayerIndex) {
                     System.out.printf("%d: %s\n", i, playerList.get(i).GetName());
                 }
+            
             }
             int chosenPlayerIndex = inputMenue.CheckUserInput(0, playerList.size() - 1);
 
@@ -413,8 +414,8 @@ public class Game {
         Game loadGame = SaveGame.loadGameState(fileName);
         return loadGame;
     }
-    public String printColoredCard(CardColor currentCardColor, CardValue currentCardValue)
-    {
-        return currentCardColor.GetColoredString(currentCardColor.name())+"_"+currentCardColor.GetColoredString(currentCardValue.name());
+    public static String printColoredCard(CardColor currentCardColor, CardValue currentCardValue) {
+        String coloredUnderscore = currentCardColor.GetColoredString("_");
+        return currentCardColor.GetColoredString(currentCardColor.name()) + coloredUnderscore + currentCardColor.GetColoredString(currentCardValue.name());
     }
 }
